@@ -1,0 +1,7 @@
+pytube
+openai
+moviepy
+whisper
+pysrt
+python-dotenv
+scenedetect
