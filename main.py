@@ -12,7 +12,19 @@ from dotenv import load_dotenv
 VIDEO_URL, DOWNLOAD_PATH, OUTPUT_PATH = load_config()
 CLIP_COUNT = 10
 
+def load_config():
+    """ .env файл ачаалж тохиргоо буцаана """
+    load_dotenv()
 
+    video_url = os.getenv("VIDEO_URL")
+    download_path = os.getenv("DOWNLOAD_PATH", "input")
+    output_path = os.getenv("OUTPUT_PATH", "output")
+
+    if not video_url:
+        raise ValueError("❌ VIDEO_URL .env дотор оруулаагүй байна!")
+
+    return video_url, download_path, output_path
+    
 # --- 1. Видео татах ---
 def download_video(url, path):
     yt = YouTube(url)
@@ -52,19 +64,6 @@ def process_clip(clip_path, output_path):
     final_path = os.path.join(output_path, os.path.basename(clip_path).replace(".mp4", "_mn.mp4"))
     burn_subtitle(clip_path, srt_path, final_path)
     return final_path
-
-def load_config():
-    """ .env файл уншиж VIDEO_URL, DOWNLOAD_PATH, OUTPUT_PATH-г буцаана """
-    load_dotenv()
-
-    video_url = os.getenv("VIDEO_URL")
-    download_path = os.getenv("DOWNLOAD_PATH", "input")
-    output_path = os.getenv("OUTPUT_PATH", "output")
-
-    if not video_url:
-        raise ValueError("❌ VIDEO_URL .env дотор оруулаагүй байна!")
-
-    return video_url, download_path, output_path
 
 # --- Run Full Process ---
 def main():
