@@ -6,12 +6,12 @@ import whisper
 from utils.subtitle import write_srt_file, burn_subtitle
 from utils.translate_chatgpt import translate_to_mongolian  # NEW
 from utils.scene_split import detect_action_scenes
+from dotenv import load_dotenv
 
 # --- SETTINGS ---
-VIDEO_URL = "https://www.youtube.com/watch?v=YOUR_VIDEO"  # соль
-DOWNLOAD_PATH = "input"
-OUTPUT_PATH = "output"
+VIDEO_URL, DOWNLOAD_PATH, OUTPUT_PATH = load_config()
 CLIP_COUNT = 10
+
 
 # --- 1. Видео татах ---
 def download_video(url, path):
@@ -52,6 +52,19 @@ def process_clip(clip_path, output_path):
     final_path = os.path.join(output_path, os.path.basename(clip_path).replace(".mp4", "_mn.mp4"))
     burn_subtitle(clip_path, srt_path, final_path)
     return final_path
+
+def load_config():
+    """ .env файл уншиж VIDEO_URL, DOWNLOAD_PATH, OUTPUT_PATH-г буцаана """
+    load_dotenv()
+
+    video_url = os.getenv("VIDEO_URL")
+    download_path = os.getenv("DOWNLOAD_PATH", "input")
+    output_path = os.getenv("OUTPUT_PATH", "output")
+
+    if not video_url:
+        raise ValueError("❌ VIDEO_URL .env дотор оруулаагүй байна!")
+
+    return video_url, download_path, output_path
 
 # --- Run Full Process ---
 def main():
