@@ -1,16 +1,13 @@
 # main.py
 import os
+from dotenv import load_dotenv
 from pytube import YouTube
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 import whisper
 from utils.subtitle import write_srt_file, burn_subtitle
 from utils.translate_chatgpt import translate_to_mongolian  # NEW
 from utils.scene_split import detect_action_scenes
-from dotenv import load_dotenv
 
-# --- SETTINGS ---
-VIDEO_URL, DOWNLOAD_PATH, OUTPUT_PATH = load_config()
-CLIP_COUNT = 10
 
 def load_config():
     """ .env файл ачаалж тохиргоо буцаана """
@@ -24,6 +21,10 @@ def load_config():
         raise ValueError("❌ VIDEO_URL .env дотор оруулаагүй байна!")
 
     return video_url, download_path, output_path
+    
+    # --- SETTINGS ---
+VIDEO_URL, DOWNLOAD_PATH, OUTPUT_PATH = load_config()
+CLIP_COUNT = 10
     
 # --- 1. Видео татах ---
 def download_video(url, path):
